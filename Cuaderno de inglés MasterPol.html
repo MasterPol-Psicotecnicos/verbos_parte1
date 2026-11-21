@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuaderno de inglés MasterPol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* Cuaderno MasterPol: barra lateral verde con las sesiones, ficha a la derecha con ejercicios en tarjetas que se corrigen bloque a bloque */
+:root{
+  --green:#174D2E; --green-2:#1F7A45; --orange:#F28C1E; --orange-d:#A85A06;
+  --paper:#F4F7F3; --card:#FFFFFF; --ink:#1B2A21; --muted:#5A6B60; --line:#D6E2D9;
+  --mint:#EAF3EC; --peach:#FFF1E0; --bad:#B03A2A; --bad-bg:#FBEBE8; --ok:#1F7A45; --ok-bg:#E6F4EA;
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --fs:17px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:var(--fs);line-height:1.55}
+body.big{--fs:21px}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px;border-radius:6px}
+.app{display:grid;grid-template-columns:280px minmax(0,1fr);min-height:100%}
+/* sidebar */
+.side{background:var(--green);color:#fff;padding:22px 16px;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+.logo{display:flex;align-items:center;gap:10px;padding:0 6px}
+.logo svg{flex:none}
+.logo .w{font-family:var(--f-display);font-weight:700;font-size:26px;letter-spacing:-.5px;line-height:1}
+.logo .w b{font-weight:700;background:linear-gradient(90deg,#FFB347,#F28C1E 55%,#E66A00);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo .t{font-size:11px;white-space:nowrap;color:#BFD8C8;letter-spacing:.3px;margin-top:3px}
+.side h2{font-family:var(--f-display);font-size:13px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:#9CC3AB;margin:6px 8px 0}
+.slist{display:flex;flex-direction:column;gap:4px;margin:0;padding:0;list-style:none}
+.sbtn{width:100%;display:grid;grid-template-columns:32px minmax(0,1fr);gap:10px;align-items:center;text-align:left;background:transparent;border:0;border-radius:10px;padding:8px;color:#E3EFE7}
+.sbtn:hover{background:#ffffff14}
+.sbtn[aria-current="true"]{background:var(--orange);color:#3A1E00}
+.sbtn .n{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;background:#ffffff1f;font-size:15px}
+.sbtn[aria-current="true"] .n{background:#3A1E00;color:var(--orange)}
+.sbtn .tt{font-size:14.5px;line-height:1.25}
+.sbtn .bar{height:4px;background:#ffffff26;border-radius:3px;margin-top:6px;overflow:hidden}
+.sbtn .bar i{display:block;height:100%;background:var(--orange);border-radius:3px}
+.sbtn[aria-current="true"] .bar{background:#3A1E0033}
+.sbtn[aria-current="true"] .bar i{background:#3A1E00}
+.actions .tog .sw{background:#C9D6CD}
+.actions .tog[aria-pressed="true"] .sw{background:var(--orange)}
+.slist .sep{font-family:var(--f-display);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:#9CC3AB;padding:12px 8px 2px;border-top:1px solid #ffffff22;margin-top:6px}
+.sbtn.mixb .n{background:var(--orange);color:#3A1E00}
+.navt{margin-left:auto;flex:none;width:36px;height:36px;border-radius:10px;border:0;background:#ffffff1a;color:#fff;display:grid;place-items:center}
+.navt:hover{background:#ffffff33}
+.navt svg{transition:transform .2s}
+body.navmin .navt svg{transform:rotate(180deg)}
+.app{transition:grid-template-columns .2s}
+@media (min-width:861px){
+  body.navmin .app{grid-template-columns:76px minmax(0,1fr)}
+  body.navmin .side{padding:18px 10px;align-items:center}
+  body.navmin .logo{flex-direction:column;gap:12px;padding:0}
+  body.navmin .logo .lt,body.navmin .side h2,body.navmin .slist .sep,body.navmin .foot .credit,body.navmin .tog .lbl{display:none}
+  body.navmin .navt{margin-left:0}
+  body.navmin .slist{align-items:center}
+  body.navmin .sbtn{grid-template-columns:32px;width:auto;padding:6px}
+  body.navmin .sbtn>span:last-child{display:none}
+  body.navmin .slist .mixb{margin-top:10px}
+  body.navmin .foot{padding:0;align-items:center}
+  body.navmin .tog{justify-content:center;width:auto;padding:9px}
+}
+.sbtn.off{opacity:.55;cursor:default}
+.sbtn .soon{font-size:11px;background:#ffffff24;border-radius:5px;padding:1px 6px;margin-left:4px}
+.side .foot{margin-top:auto;font-size:12.5px;color:#A9CBB6;padding:0 8px;display:flex;flex-direction:column;gap:8px}
+.tog{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#ffffff14;border:0;border-radius:10px;padding:9px 12px;color:#fff;font-size:14px;width:100%}
+.tog .sw{width:34px;height:20px;border-radius:10px;background:#ffffff40;position:relative;flex:none;transition:background .2s}
+.tog .sw:after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .2s}
+.tog[aria-pressed="true"] .sw{background:var(--orange)}
+.tog[aria-pressed="true"] .sw:after{left:17px}
+/* ayuda */
+.modal{position:fixed;inset:0;background:#0F2A1BB3;display:grid;place-items:center;padding:16px;z-index:50}
+.modal[hidden]{display:none}
+.mbox{background:var(--card);border-radius:18px;max-width:560px;width:100%;padding:26px 26px 22px;position:relative;border-top:6px solid var(--orange);max-height:90%;overflow-y:auto}
+.mbox h2{font-family:var(--f-display);color:var(--green);font-size:26px;margin:4px 0 12px;line-height:1.15}
+.mbox ol{margin:0 0 14px;padding-left:22px;display:grid;gap:8px}
+.mbox li::marker{color:var(--orange-d);font-weight:700}
+.mbox b{color:var(--green)}
+.mx{position:absolute;top:10px;right:12px;width:36px;height:36px;border:0;background:var(--mint);border-radius:50%;font-size:22px;line-height:1;color:var(--green)}
+.mx:hover{background:#d4e9db}
+/* main */
+main{padding:28px clamp(16px,4vw,48px) 80px;max-width:1000px;width:100%}
+.eyebrow{font-family:var(--f-display);font-weight:500;color:var(--orange-d);letter-spacing:1.6px;text-transform:uppercase;font-size:13px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(28px,4vw,40px);line-height:1.1;margin:4px 0 10px;color:var(--green);text-wrap:balance;letter-spacing:-.5px}
+.topics{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 16px;padding:0;list-style:none}
+.topics li{background:var(--mint);color:var(--green);border-radius:999px;padding:3px 11px;font-size:14px}
+.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:12px;align-items:stretch;margin-bottom:14px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.tile .k{font-size:13px;color:var(--muted)}
+.tile .v{font-family:var(--f-display);font-weight:700;font-size:26px;color:var(--green);font-variant-numeric:tabular-nums}
+.tile .v small{font-size:15px;color:var(--muted);font-weight:500}
+.actions{display:flex;flex-direction:column;gap:6px;justify-content:center}
+.help{background:var(--peach);border-radius:12px;padding:10px 14px;font-size:15px;margin-bottom:22px;display:flex;gap:10px;align-items:flex-start}
+.help b{color:var(--orange-d)}
+.btn{border:1.5px solid var(--line);background:var(--card);border-radius:9px;padding:7px 14px;font-size:15px;font-weight:700;color:var(--green);display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--green-2)}
+.btn.pri{background:var(--green-2);border-color:var(--green-2);color:#fff}
+.btn.pri:hover{background:var(--green)}
+.btn.or{background:var(--orange);border-color:var(--orange);color:#3A1E00}
+.btn.sm{font-size:13.5px;padding:5px 10px}
+.btn[hidden]{display:none}
+/* exercise card */
+.ex{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:20px;overflow:hidden}
+.ex-h{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start;padding:16px 18px 10px;border-bottom:1px solid var(--line)}
+.ex-n{font-family:var(--f-display);font-weight:700;background:var(--green);color:#fff;border-radius:10px;min-width:38px;height:38px;display:grid;place-items:center;font-size:17px;padding:0 8px}
+.ex-t{font-family:var(--f-display);font-weight:700;font-size:20px;color:var(--green);line-height:1.2;margin:2px 0 2px}
+.ex-i{color:var(--muted);font-size:15.5px}
+.score{font-family:var(--f-display);font-weight:700;font-size:15px;border-radius:999px;padding:4px 11px;background:var(--mint);color:var(--green);white-space:nowrap;font-variant-numeric:tabular-nums}
+.score.part{background:var(--peach);color:var(--orange-d)}
+.score.full{background:var(--green-2);color:#fff}
+.score.rev{background:#EEF0EE;color:var(--muted)}
+.bank{display:flex;flex-wrap:wrap;gap:6px;padding:10px 18px 0;align-items:center}
+.bank span.l{font-size:13px;color:var(--muted);margin-right:2px}
+.chip{border:1.5px dashed var(--green-2);background:var(--mint);color:var(--green);border-radius:8px;padding:2px 10px;font-size:15px}
+.chip:hover{background:#d7ebdd}
+.note{margin:10px 18px 0;background:var(--mint);border-left:4px solid var(--green-2);padding:6px 12px;font-size:14.5px;color:var(--green);border-radius:0}
+.items{padding:8px 18px 4px;display:grid;gap:2px}
+.items.c2{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
+.items.c3{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:20px}
+.it{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:8px;align-items:start;padding:9px 0;border-bottom:1px dashed #E3EBE5}
+.items .it:last-child{border-bottom:0}
+.it .num{font-family:var(--f-display);font-weight:700;color:var(--orange-d);font-size:15px;padding-top:3px;font-variant-numeric:tabular-nums}
+.it .q{min-width:0;word-wrap:break-word}
+.it .q .ln{display:block}
+.it .q .ln+.ln{margin-top:6px}
+input.gap{font:inherit;font-size:.97em;border:0;border-bottom:2px solid #9DBBA7;background:#F7FAF8;border-radius:5px 5px 0 0;padding:1px 6px;margin:0 2px;color:var(--ink);max-width:100%;min-width:3.5ch}
+input.gap:focus{outline:none;border-bottom-color:var(--orange);background:#FFF8EE}
+input.gap.long{display:block;width:100%;margin:6px 0 0}
+input.gap.ok{border-bottom-color:var(--ok);background:var(--ok-bg);color:var(--ok);font-weight:700}
+input.gap.bad{border-bottom-color:var(--bad);background:var(--bad-bg);color:var(--bad);text-decoration:line-through;text-decoration-thickness:1.5px}
+input.gap.rev{border-bottom-color:#B7C2BB;background:#F1F3F1;color:var(--muted)}
+.choice{display:inline-flex;flex-wrap:wrap;gap:5px;vertical-align:middle;margin:2px 2px}
+.opt{border:1.5px solid #BFD1C5;background:#fff;border-radius:8px;padding:1px 10px;font-size:.95em;line-height:1.5}
+.opt:hover{border-color:var(--green-2)}
+.opt.sel{background:var(--green-2);border-color:var(--green-2);color:#fff}
+.opt.ok{background:#fff;color:var(--green);border:2.5px solid var(--orange);font-weight:700}
+.opt.ok:after{content:" ✓";color:var(--orange-d)}
+.opt.bad{background:#fff;color:#9AA39D;border-color:#D9DED9;text-decoration:line-through;text-decoration-color:var(--bad);text-decoration-thickness:2px}
+.opt.right{border:2.5px dashed var(--orange);color:var(--green);font-weight:700}
+.opt.rev{border:2px solid #B7C2BB;color:var(--muted);font-weight:700;background:#F1F3F1}
+.say{border:0;background:var(--mint);color:var(--green);width:32px;height:32px;border-radius:50%;display:none;place-items:center;flex:none}
+.say:hover{background:#d4e9db}
+.say svg{width:17px;height:17px}
+.ex.checked .say,.ex.revealed .say{display:grid}
+.fb{grid-column:2 / -1;font-size:14.5px;border-radius:8px;padding:5px 10px;display:none}
+.fb.show{display:block}
+.fb.err{background:var(--bad-bg);color:#7A2318}
+.fb.blank{background:#EFF2EF;color:var(--muted)}
+.fb.ok{background:var(--ok-bg);color:#17552F}
+.fb b{font-weight:700}
+table.grid{border-collapse:separate;border-spacing:0;width:100%;margin:10px 0 6px;font-size:16px}
+.tablewrap{padding:4px 18px 10px;overflow-x:auto}
+table.grid th{background:var(--green);color:#fff;font-weight:700;padding:7px 8px;text-align:center;font-size:14.5px}
+table.grid th:first-child{border-top-left-radius:8px}
+table.grid th:last-child{border-top-right-radius:8px}
+table.grid td{padding:6px 8px;text-align:center;border-bottom:1px solid var(--line)}
+table.grid tr:nth-child(even) td{background:#F6FAF7}
+table.grid td input.gap{width:100%;text-align:center;margin:0}
+.open{padding:12px 18px 4px;display:grid;gap:10px}
+.open textarea{font:inherit;width:100%;min-height:130px;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;resize:vertical;background:#FBFCFB}
+.open textarea:focus{outline:none;border-color:var(--orange)}
+.model{display:none;background:var(--peach);border-radius:10px;padding:10px 14px;gap:10px;grid-template-columns:minmax(0,1fr) auto;align-items:start}
+.model.show{display:grid}
+.model .lab{font-size:13px;color:var(--orange-d);font-weight:700;letter-spacing:.4px}
+.model .say{display:grid;background:#fff}
+.count{font-size:13px;color:var(--muted)}
+.ex-f{display:flex;flex-wrap:wrap;gap:8px;padding:12px 18px 16px;align-items:center}
+.ex-f .msg{font-size:14px;color:var(--bad);margin-left:4px}
+.mbar{display:none}
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:static;height:auto;padding:14px 16px 10px;gap:12px}
+  .side h2,.side .foot .credit{display:none}
+  .slist{flex-direction:row;overflow-x:auto;padding-bottom:6px;gap:6px}
+  .slist li{flex:none;width:170px}
+  .slist .sep{display:none}
+  body.navmin .slist,body.navmin .side .foot{display:none}
+  .navt svg{transform:rotate(90deg)}
+  body.navmin .navt svg{transform:rotate(-90deg)}
+  body.navmin .side{padding-bottom:14px}
+  .side .foot{flex-direction:row;margin-top:0;padding:0}
+  .summary{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .summary .actions{grid-column:1 / -1;flex-direction:row;flex-wrap:wrap}
+  .items.c3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:520px){
+  .items.c2,.items.c3{grid-template-columns:minmax(0,1fr)}
+  .ex-h{grid-template-columns:auto minmax(0,1fr)}
+  .ex-h .score{grid-column:2;justify-self:start}
+  .tile .v{font-size:21px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" aria-label="Sesiones">
+    <div class="logo">
+      <svg width="52" height="46" viewBox="0 0 52 46" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFB347"/><stop offset=".55" stop-color="#F28C1E"/><stop offset="1" stop-color="#E06000"/></linearGradient></defs>
+        <path d="M26 2 L50 13 L26 24 L2 13 Z" fill="#fff"/>
+        <path d="M11 19 L26 26.5 L41 19 L41 27 L26 41 L11 27 Z" fill="url(#lg)"/>
+        <path d="M44.5 15 L44.5 30" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="44.5" cy="32" r="2.6" fill="#fff"/>
+      </svg>
+      <div class="lt"><div class="w">Master<b>Pol</b></div><div class="t">Formación y oposiciones</div></div>
+      <button class="navt" id="tNav" type="button" aria-expanded="true" aria-controls="slist" aria-label="Minimizar el menú" title="Minimizar el menú"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    </div>
+    <h2>Inglés · Guardia Civil</h2>
+    <ul class="slist" id="slist"></ul>
+    <div class="foot">
+      
+      <div class="credit">Tus respuestas se guardan en este navegador.</div>
+    </div>
+  </aside>
+  <main id="main" tabindex="-1"></main>
+</div>
+<div class="modal" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpT" hidden>
+  <div class="mbox">
+    <button class="mx" type="button" data-act="closehelp" aria-label="Cerrar">×</button>
+    <div class="eyebrow">Antes de empezar</div>
+    <h2 id="helpT">Cómo funciona el cuaderno</h2>
+    <ol>
+      <li>Escribe en los huecos o pulsa la opción que creas correcta.</li>
+      <li>Al terminar cada ejercicio, pulsa <b>Corregir</b>. Verás tus aciertos en verde y la solución de cada fallo con su explicación.</li>
+      <li>Las contracciones valen igual (<i lang="en">I'm</i> = <i lang="en">I am</i>) y no importan las mayúsculas.</li>
+      <li>Después de corregir aparece el altavoz para escuchar cada frase en inglés.</li>
+      <li>Con <b>Repetir lo fallado</b> vuelves a intentar solo lo que te salió mal.</li>
+    </ol>
+    <p class="count">Tus respuestas se guardan en este navegador. Puedes volver a ver esta ayuda con el botón «Cómo funciona».</p>
+    <button class="btn pri" type="button" data-act="closehelp" id="helpOk">Entendido, empezar</button>
+  </div>
+</div>
+<script>
+const S=[];
+S.push({n:1,title:'To be, pronombres y have got',sub:'To be · Pronombres · Have got · Plurales y artículos',ex:[
+{t:'To be',i:'Completa con am, is o are.',items:[
+'My sister {{is}} a nurse.','We {{are}} from Portugal.',{q:'I {{am}} 23 years old.',w:'La edad va con be.'},{q:'The police {{are}} here.',w:'Police siempre es plural.'},'{{Are}} you tired?','It {{is}} cold today.','They {{are}} not at home.',{q:'"Is he Spanish?" "No, he {{isn\'t|is not}}."',w:'Respuesta corta.'}]},
+{t:'Negativa e interrogativa',i:'Escribe cada frase en negativa (–) y en interrogativa (?).',items:[
+'She is a civil guard.\n(–) {{She isn\'t a civil guard.|She\'s not a civil guard.}}\n(?) {{Is she a civil guard?}}',
+'They are at the station.\n(–) {{They aren\'t at the station.|They\'re not at the station.}}\n(?) {{Are they at the station?}}',
+{q:'I am late.\n(–) {{I\'m not late.}}\n(?) {{Am I late?}}',w:'Nunca «amn\'t».'},
+'Your car is new.\n(–) {{Your car isn\'t new.}}\n(?) {{Is your car new?}}']},
+{t:'Pronombres',i:'Elige la opción correcta.',items:[
+{q:'[[Me|*I]] am a student.',w:'Sujeto.'},{q:'Can you help [[we|*us]]?',w:'Objeto, detrás del verbo.'},{q:'This is [[*my|mine]] car.',w:'Va delante de un nombre.'},{q:'The car is [[her|*hers]].',w:'Sin nombre detrás.'},{q:'Juan loves [[*his|her]] mother.',w:'El poseedor es Juan.'},{q:'María lives with [[his|*her]] brother.',w:'La poseedora es María.'},{q:'The dog is in [[it\'s|*its]] bed.',w:'It\'s = it is.'},{q:'This present is for [[they|*them]].',w:'Detrás de preposición → objeto.'}]},
+{t:'El cuadro de los pronombres',i:'Completa las casillas vacías.',table:{head:['Sujeto','Objeto','Adj. posesivo','Pron. posesivo'],rows:[['I','me','{{my}}','{{mine}}'],['{{you}}','you','your','{{yours}}'],['he','{{him}}','his','{{his}}'],['{{she}}','her','{{her}}','hers'],['we','{{us}}','our','{{ours}}'],['{{they}}','them','{{their}}','theirs']]}},
+{t:'Have got',i:'Completa con have got, has got, haven\'t got o hasn\'t got según el signo. En las preguntas, usa have o has y got.',items:[
+'My brother {{has got|\'s got}} a motorbike. (+)','I {{haven\'t got}} any sisters. (–)','{{Have}} you {{got}} a driving licence?','She {{has got|\'s got}} long curly hair. (+)','We {{haven\'t got}} a car. (–)','{{Has}} he {{got}} a beard?',{q:'"Have you got a pen?" "Yes, I {{have}}."',w:'En la respuesta corta, sin got.'}]},
+{t:'¿Be o have got?',i:'Traduce al inglés.',items:[
+'Tengo 30 años. → {{I\'m 30.|I\'m 30 years old.}}','Tengo un hermano. → {{I\'ve got a brother.|I have got a brother.|I have a brother.}}','Ella tiene frío. → {{She\'s cold.}}','Él tiene los ojos azules. → {{He\'s got blue eyes.|He has blue eyes.}}','Tenemos hambre. → {{We\'re hungry.}}','Tienen un perro. → {{They\'ve got a dog.|They have a dog.}}','Tienes razón. → {{You\'re right.}}','Tengo dolor de cabeza. → {{I\'ve got a headache.|I have a headache.}}']},
+{t:'He\'s… ¿is o has?',i:'Elige IS o HAS.',items:[
+'He\'s tall. → [[*IS|HAS]]',{q:'She\'s got a scar. → [[IS|*HAS]]',w:'Si detrás va got, \'s = has.'},'It\'s my car. → [[*IS|HAS]]','He\'s a civil guard. → [[*IS|HAS]]','She\'s got two children. → [[IS|*HAS]]','He\'s working. → [[*IS|HAS]]']},
+{t:'Plurales',i:'Escribe el plural.',cols:3,items:['car → {{cars}}','bus → {{buses}}','city → {{cities}}','knife → {{knives}}','man → {{men}}','child → {{children}}','person → {{people}}','watch → {{watches}}','day → {{days}}','woman → {{women}}','thief → {{thieves}}','foot → {{feet}}']},
+{t:'A o an',i:'Elige a o an. Manda el sonido, no la letra.',cols:2,items:['[[a|*an]] officer','[[*a|an]] uniform','[[a|*an]] hour','[[*a|an]] car','[[a|*an]] ID card','[[*a|an]] European country','[[a|*an]] honest man','[[a|*an]] address']},
+{t:'Corrige el error',i:'Cada frase tiene un error. Escríbela bien.',items:[
+{q:'Is a policeman. → {{He is a policeman.|He\'s a policeman.|She is a policeman.}}',w:'El sujeto es obligatorio.'},{q:'I have 25 years. → {{I\'m 25.|I\'m 25 years old.}}',w:'La edad va con be.'},{q:'She is police officer. → {{She is a police officer.}}',w:'Las profesiones llevan artículo.'},{q:'This is the mine. → {{This is mine.}}',w:'Mine sin artículo.'},'Do you have got a car? → {{Have you got a car?|Do you have a car?}}','The police is coming. → {{The police are coming.}}','My parents is from Germany. → {{My parents are from Germany.}}','He\'s got blue eye. → {{He\'s got blue eyes.}}']}
+]});
+
+S.push({n:2,title:'Presente simple',sub:'Presente simple · Adverbios de frecuencia · Preguntas con do / does y wh- · At, on, in · La hora · Profesiones',ex:[
+{t:'La -s de la tercera persona',i:'Escribe la forma de he / she / it.',cols:3,note:'Añaden -es los verbos en -s, -sh, -ch, -x y -o. Consonante + y → -ies; vocal + y → -s. Have → has.',items:['work → {{works}}','watch → {{watches}}','go → {{goes}}','study → {{studies}}','play → {{plays}}','do → {{does}}','have → {{has}}','fix → {{fixes}}','catch → {{catches}}','finish → {{finishes}}','carry → {{carries}}','wash → {{washes}}']},
+{t:'Presente simple',i:'Completa con el verbo entre paréntesis (+ afirmativa, – negativa, ? pregunta).',items:[
+'My brother {{works}} at night. (work, +)','She {{doesn\'t drive|does not drive}} to work. (drive, –)','{{Do}} you {{live}} in Elche? (live, ?)',{q:'The police {{patrol}} the area every night. (patrol, +)',w:'Police es plural: sin -s.'},'He {{doesn\'t have|does not have}} a car. (have, –)','{{Does}} your sister {{speak}} English? (speak, ?)','We {{don\'t work|do not work}} on Sundays. (work, –)','My father {{watches}} the news every evening. (watch, +)',{q:'"Does he smoke?" "No, he {{doesn\'t}}."',w:'Respuesta corta con does.'},'"Do they live here?" "Yes, they {{do}}."']},
+{t:'Do o does · don\'t o doesn\'t',i:'Elige la opción correcta.',note:'Does y doesn\'t con he / she / it. Detrás, el verbo va sin -s.',items:[
+'[[Do|*Does]] your brother work here?','[[*Do|Does]] you like coffee?','She [[don\'t|*doesn\'t]] eat meat.','They [[*don\'t|doesn\'t]] live in Madrid.','Where [[*do|does]] you work?','What time [[do|*does]] the bank open?','It [[don\'t|*doesn\'t]] rain much here.',{q:'[[*Do|Does]] the police know about it?',w:'Police es plural.'}]},
+{t:'Adverbios de frecuencia',i:'Escribe la frase con el adverbio en su sitio.',note:'Delante del verbo principal, detrás de be y entre el auxiliar y el verbo. Never ya es negativo: nunca con not.',items:[
+'He is late. (always) → {{He is always late.|He\'s always late.}}','I drink coffee. (never) → {{I never drink coffee.}}','They work at weekends. (sometimes) → {{They sometimes work at weekends.|Sometimes they work at weekends.}}','She is at home in the morning. (usually) → {{She is usually at home in the morning.|She\'s usually at home in the morning.}}','We don\'t go out on Mondays. (usually) → {{We don\'t usually go out on Mondays.}}','Do you take the bus? (often) → {{Do you often take the bus?}}']},
+{t:'Preguntas con wh-',i:'Completa la pregunta con la partícula que corresponde a la respuesta.',bank:['what','where','when','who','what time','how often','how many','whose'],say:'all',items:[
+'{{Where}} do you live? → In Elche.','{{What time|When}} does the train leave? → At 7:15.','{{How often}} do you go to the gym? → Three times a week.','{{Who}} lives with you? → My sister.','{{How many}} brothers have you got? → Two.','{{Whose}} car is this? → It\'s Juan\'s.','{{What}} do you do? → I\'m a nurse.','{{When}} do you have English classes? → On Tuesdays.']},
+{t:'¿Pregunta de sujeto o de objeto?',i:'Lee la situación y elige la pregunta correcta.',note:'Si preguntas por el sujeto (quién hace la acción), no se usa do / does.',na:true,items:[
+{q:'Juan llama a Ana. ¿Quién llama a Ana? → [[*Who calls Ana?|Who does Ana call?]]',w:'Preguntas por el sujeto: sin does.'},{q:'Juan llama a Ana. ¿A quién llama Juan? → [[Who calls Juan?|*Who does Juan call?]]',w:'Preguntas por el objeto: con does.'},{q:'Laura tiene las llaves. ¿Quién tiene las llaves? → [[*Who has the keys?|Who does have the keys?]]',w:'Sujeto: sin does.'},{q:'Pedro vigila el banco. ¿Qué vigila Pedro? → [[What watches Pedro?|*What does Pedro watch?]]',w:'Objeto: con does.'}]},
+{t:'At, on o in',i:'Elige la preposición de tiempo.',cols:3,note:'At + hora (y at night, at the weekend, at Christmas). On + día o fecha. In + mes, año, estación y partes del día.',items:['[[*at|on|in]] 7 o\'clock','[[at|*on|in]] Monday','[[at|on|*in]] July','[[at|on|*in]] the morning','[[*at|on|in]] night','[[at|*on|in]] 25 December','[[at|on|*in]] 2024','[[*at|on|in]] the weekend','[[at|*on|in]] Friday evening','[[at|on|*in]] summer','[[*at|on|in]] Christmas','[[at|on|*in]] the afternoon']},
+{t:'La hora',i:'Escribe la hora en inglés.',note:'Past = y; to = menos. A quarter = cuarto; half = media.',items:[
+'7:15 → It\'s {{quarter past seven|a quarter past seven|seven fifteen}}.','9:30 → It\'s {{half past nine|nine thirty}}.','10:45 → It\'s {{quarter to eleven|a quarter to eleven|ten forty-five}}.','8:00 → It\'s {{eight o\'clock|eight}}.','12:20 → It\'s {{twenty past twelve|twelve twenty}}.','5:50 → It\'s {{ten to six|five fifty}}.']},
+{t:'Profesiones',i:'Traduce al inglés. Ojo con el artículo.',note:'Las profesiones llevan a / an: She\'s a lawyer.',items:[
+'Ella es abogada. → {{She\'s a lawyer.|She is a lawyer.}}','Él es ingeniero. → {{He\'s an engineer.|He is an engineer.}}','Soy enfermera. → {{I\'m a nurse.|I am a nurse.}}','Mi padre es bombero. → {{My father is a firefighter.|My father\'s a firefighter.|My father is a fireman.}}','Ellos son policías. → {{They\'re police officers.|They are police officers.|They\'re policemen.|They are policemen.}}','Ella es funcionaria. → {{She\'s a civil servant.|She is a civil servant.}}']},
+{t:'Corrige el error',i:'Cada frase tiene un error. Escríbela bien.',items:[
+'He work in a bank. → {{He works in a bank.}}','She don\'t like coffee. → {{She doesn\'t like coffee.}}',{q:'Does he works here? → {{Does he work here?}}',w:'Does ya lleva la -s.'},{q:'I don\'t never drink alcohol. → {{I never drink alcohol.|I don\'t ever drink alcohol.}}',w:'Never ya es negativo.'},'Where you live? → {{Where do you live?}}',{q:'Who does have the keys? → {{Who has the keys?}}',w:'Pregunta de sujeto: sin does.'},'My meeting is in Monday. → {{My meeting is on Monday.}}','She is nurse. → {{She is a nurse.|She\'s a nurse.}}','He studys at night. → {{He studies at night.}}','Always I get up at 7. → {{I always get up at 7.}}']}
+]});
+
+S.push({n:3,title:'Presente continuo',sub:'Presente continuo · Simple vs continuo · Demostrativos · Preposiciones de lugar · Ropa',ex:[
+{t:'La forma -ing',i:'Escribe la forma -ing de cada verbo.',cols:3,note:'Se dobla la consonante en run, sit, stop, travel (británico) y begin; en visit no, porque el acento no va en la última sílaba.',items:['work → {{working}}','drive → {{driving}}','run → {{running}}','sit → {{sitting}}','lie → {{lying}}','see → {{seeing}}','make → {{making}}','stop → {{stopping}}','travel → {{travelling|traveling}}','visit → {{visiting}}','begin → {{beginning}}','die → {{dying}}']},
+{t:'Presente continuo',i:'Completa con el verbo entre paréntesis en presente continuo (+ afirmativa, – negativa, ? pregunta).',items:[
+'The suspect {{is driving|\'s driving}} a black car. (drive, +)','I {{\'m not working|am not working}} at the moment. (work, –)','{{Are}} they {{waiting}} for the bus? (wait, ?)','We {{are patrolling|\'re patrolling}} in the street. (patrol, +)','She {{isn\'t wearing|\'s not wearing}} her uniform today. (wear, –)','{{Is}} he {{talking}} on the phone? (talk, ?)',{q:'Look! Two men {{are running|\'re running}} out of the bank. (run, +)',w:'Run → running.'},{q:'"Are you listening?" "Yes, I {{am}}."',w:'Respuesta corta, sin contraer.'}]},
+{t:'¿Simple o continuo?',i:'Elige la opción correcta. Fíjate en las palabras clave.',items:[
+{q:'He [[*works|is working]] in Elche. He lives there.',w:'Hecho permanente.'},{q:'Look! The dog [[runs|*is running]] away.',w:'Look!'},{q:'I usually [[*get|am getting]] up at 7.',w:'Usually.'},{q:'Be quiet! The baby [[sleeps|*is sleeping]].',w:'Ahora mismo.'},{q:'She [[*wears|is wearing]] a uniform every day.',w:'Every day.'},{q:'Today she [[wears|*is wearing]] jeans.',w:'Today, algo temporal.'},{q:'They [[don\'t watch|*aren\'t watching]] TV right now.',w:'Right now.'},{q:'How often [[*do you go|are you going]] to the gym?',w:'How often → rutina.'}]},
+{t:'Verbos de estado',i:'Algunas frases son correctas y otras no. Escribe OK o corrígelas.',items:[
+'I\'m knowing the answer. → {{I know the answer.}}',{q:'She\'s having lunch now. → {{OK}}',w:'Have = comer, es una acción.'},'Do you understand me? → {{OK}}','He\'s wanting a new car. → {{He wants a new car.}}','This bag is belonging to me. → {{This bag belongs to me.}}',{q:'We\'re having a big house. → {{We have a big house.|We have got a big house.|We\'ve got a big house.}}',w:'Have = tener, no va en continuo.'}]},
+{t:'This, that, these, those',i:'Completa. Fíjate en si está cerca (here) o lejos (there) y si es singular o plural.',items:[
+'{{That}} is my car, over there.','{{These}} are my keys. Here, in my hand.','Look at {{those}} men over there!','{{This}} book here is very good.',{q:'Hello, {{this}} is Laura. Can I speak to Ana?',w:'Al teléfono.'},{q:'Who are {{these}} people here with you?',w:'People es plural.'}]},
+{t:'One / ones',i:'Completa con one u ones.',items:[
+'I don\'t like this jacket. I prefer the black {{one}}.','"Which shoes?" "The brown {{ones}}."','My phone is very old. I need a new {{one}}.',{q:'These trousers are too big. Have you got smaller {{ones}}?',w:'Trousers es plural.'},'"Which car is yours?" "The red {{one}}."']},
+{t:'Preposiciones de lugar',i:'Completa con in, on, at, under, next to, between, behind, in front of u opposite.',bank:['in','on','at','under','next to','between','behind','in front of','opposite'],items:[
+'The keys are {{on}} the table.','Wait for me {{at}} the bus stop.','The café is {{between}} the bank and the pharmacy.','The cat is {{under}} the bed. (debajo)',{q:'I\'m {{on}} the train. I\'ll be late.',w:'On the train / bus.'},{q:'He lives in the house {{opposite}} ours, on the other side of the street.',w:'Enfrente, al otro lado.'},{q:'She\'s {{at}} home now.',w:'At home.'},'The car is parked {{behind}} the building. You can\'t see it from the street.',{q:'There\'s a man {{in front of}} the door. He\'s waiting to come in.',w:'Delante de.'},'There are two pictures {{on}} the wall.']},
+{t:'Wear o carry',i:'Completa con wearing o carrying.',items:[
+'He\'s {{wearing}} a black cap and sunglasses.','She\'s {{carrying}} a big box.','The suspect is {{wearing}} a grey hoodie.','He\'s {{carrying}} a bag in his left hand.','They\'re {{wearing}} uniforms.']},
+{t:'Corrige el error',i:'Cada frase tiene un error. Escríbela bien.',items:[
+{q:'He working now. → {{He\'s working now.}}',w:'Falta be.'},{q:'Does she wearing a dress? → {{Is she wearing a dress?}}',w:'Sin does.'},'I\'m stoping the car. → {{I\'m stopping the car.}}','This people are from Morocco. → {{These people are from Morocco.}}','My jeans is blue. → {{My jeans are blue.}}','I\'m in the bus. → {{I\'m on the bus.}}','The bank is in front of my house, on the other side of the street. → {{The bank is opposite my house.|The bank is opposite my house, on the other side of the street.}}','The shop is next of the café. → {{The shop is next to the café.}}']}
+]});
+
+S.push({n:4,title:'Contables y cuantificadores',sub:'Contables e incontables · There is / there are · Cuantificadores · Compras y dinero',ex:[
+{t:'¿Contable o incontable?',i:'Elige C (contable) o U (incontable).',cols:3,note:'Money, information, advice, evidence, furniture, news, bread y luggage son incontables.',items:['money → [[C|*U]]','coin → [[*C|U]]','information → [[C|*U]]','advice → [[C|*U]]','phone → [[*C|U]]','evidence → [[C|*U]]','furniture → [[C|*U]]','chair → [[*C|U]]','news → [[C|*U]]','bread → [[C|*U]]','sandwich → [[*C|U]]','luggage → [[C|*U]]']},
+{t:'A, an o some',i:'Elige a, an o some.',cols:2,items:['[[*a|an|some]] car','[[a|an|*some]] money','[[a|*an|some]] officer','[[a|an|*some]] information','[[a|an|*some]] witnesses','[[a|an|*some]] advice',{q:'[[a|*an|some]] ID card',w:'ID suena /ai/.'},'[[a|an|*some]] bread']},
+{t:'There is / there are',i:'Completa con la forma correcta (+ afirmativa, – negativa, ? pregunta).',items:[
+'{{There is|There\'s}} a man at the door. (+)','{{There are}} two cars in the street. (+)','{{There isn\'t|There is not}} any money in the bag. (–)','{{Are there}} any witnesses? (?)','{{Is there}} a bank near here? (?)','{{There aren\'t|There are not}} any people in the bar. (–)','"Is there a problem?" "No, there {{isn\'t}}."','"Are there any questions?" "Yes, there {{are}}."']},
+{t:'Some o any',i:'Completa con some o any.',note:'Some en ofrecimientos y peticiones, aunque sean preguntas.',items:[
+'There are {{some}} phones in the car.','There isn\'t {{any}} milk.','Have you got {{any}} brothers?','Would you like {{some}} coffee?','We haven\'t got {{any}} information.','Can I have {{some}} water, please?','Are there {{any}} witnesses?','I need {{some}} advice.']},
+{t:'Much, many o a lot of',i:'Elige la opción correcta.',items:[
+'How [[*much|many]] money have you got?','There aren\'t [[much|*many]] cars today.','There is [[*a lot of|many]] traffic.','How [[much|*many]] people are there?','I don\'t have [[*much|many]] time.','There are too [[much|*many]] people here.']},
+{t:'A few o a little',i:'Completa con a few o a little.',note:'A few con contables, a little con incontables.',items:[
+'There\'s {{a little}} milk in the fridge.','I\'ve got {{a few}} friends in Madrid.','Can I have {{a little}} sugar?','There are {{a few}} cars in the street.','We need {{a little}} time to think.','He bought {{a few}} things at the supermarket.']},
+{t:'How much o how many',i:'Escribe la pregunta para cada respuesta.',say:'all',items:[
+'{{How many brothers have you got?|How many brothers do you have?}} → I\'ve got three brothers.','{{How much money is there in your wallet?|How much money is in your wallet?|How much money have you got in your wallet?}} → There\'s €50 in my wallet.','{{How many people are there in the room?}} → There are twenty people in the room.',{q:'{{How much are the shoes?|How much do the shoes cost?}} → The shoes are €40.',w:'Para el precio: how much.'},'{{How much water do you drink a day?}} → I drink two litres of water a day.']},
+{t:'Cómo contar lo incontable',i:'Completa con piece, bottle, loaf, cup, slice o packet.',cols:2,bank:['piece','bottle','loaf','cup','slice','packet'],items:['a {{bottle}} of water','a {{loaf}} of bread','a {{piece}} of advice','a {{cup}} of coffee','a {{slice}} of cheese','a {{packet}} of crisps']},
+{t:'Vocabulario: compras y dinero',i:'Traduce al inglés.',cols:2,note:'Receipt ≠ recipe (receta).',items:['cartera → {{wallet}}','monedero → {{purse}}','tique de compra → {{receipt}}','cambio (la vuelta) → {{change}}','dinero en efectivo → {{cash}}','panadería → {{baker\'s|bakery}}','farmacia → {{chemist\'s|pharmacy}}','cajero automático → {{cash machine|ATM|cashpoint}}']},
+{t:'Corrige el error',i:'Cada frase tiene un error. Escríbela bien.',items:[
+'Can you give me an advice? → {{Can you give me some advice?|Can you give me a piece of advice?}}','The news are very bad. → {{The news is very bad.}}',{q:'Have a man at the door. → {{There is a man at the door.|There\'s a man at the door.}}',w:'«Hay» = there is.'},'There are much people here. → {{There are a lot of people here.|There are many people here.|There are lots of people here.}}',{q:'I haven\'t got no money. → {{I haven\'t got any money.|I\'ve got no money.}}',w:'Sin doble negación.'},'The police found new evidences. → {{The police found new evidence.}}','How many money do you need? → {{How much money do you need?}}','Can I pay with cash? → {{Can I pay in cash?}}']}
+]});
+
+S.push({n:5,title:'Pasado simple y adjetivos',sub:'Pasado simple · Adjetivos · Comparativos y superlativos · Adjetivo + preposición · Conectores · Carácter',ex:[
+{t:'La -ed',i:'Escribe el pasado de estos verbos regulares.',cols:3,note:'Se dobla en stop y rob; play mantiene la y porque va tras vocal.',items:['work → {{worked}}','live → {{lived}}','stop → {{stopped}}','study → {{studied}}','play → {{played}}','arrest → {{arrested}}','carry → {{carried}}','rob → {{robbed}}','arrive → {{arrived}}']},
+{t:'Pasados irregulares',i:'Escribe el pasado.',cols:3,items:['see → {{saw}}','go → {{went}}','steal → {{stole}}','break → {{broke}}','hide → {{hid}}','eat → {{ate}}','catch → {{caught}}','write → {{wrote}}','forget → {{forgot}}']},
+{t:'Pasado simple',i:'Completa con el verbo entre paréntesis en pasado simple (+ afirmativa, – negativa, ? pregunta).',items:[
+'The thief {{escaped}} through the window. (escape, +)','I {{was}} at home last night. (be, +)','They {{didn\'t find|did not find}} the car. (find, –)','{{Did}} you {{see}} the man? (see, ?)','We {{weren\'t|were not}} at the station at 8. (be, –)','{{Did}} she {{call}} the police? (call, ?)','He {{lost}} his wallet two days ago. (lose, +)',{q:'"Did they arrest him?" "Yes, they {{did}}."',w:'Respuesta corta con did.'}]},
+{t:'Expresiones de pasado',i:'Completa con ago, last, yesterday o in.',bank:['ago','last','yesterday','in'],note:'Ago va detrás; last sin the; in + año o mes.',items:[
+'I saw him two days {{ago}}.','The robbery happened {{last}} night.','She was born {{in}} 1998.','We met {{yesterday}} morning.','They moved here ten years {{ago}}.','He started the job {{in}} May.']},
+{t:'-ed o -ing',i:'Elige la opción correcta.',note:'-ed: cómo te sientes; -ing: cómo es la cosa.',items:[
+'The film was very [[bored|*boring]].','I\'m [[*interested|interesting]] in history.','It was a [[tired|*tiring]] day.','She was [[*worried|worrying]] about her son.','The news is very [[surprised|*surprising]].','We were [[*bored|boring]] at the meeting.']},
+{t:'El orden de los adjetivos',i:'Ordena los adjetivos y escribe la expresión completa.',note:'Opinión, tamaño, edad, forma, color, origen, material.',items:[
+'a / jacket / leather / black → {{a black leather jacket}}','a / car / old / big → {{a big old car}}','a / man / tall / young → {{a tall young man}}','a / bag / Italian / nice → {{a nice Italian bag}}','a / table / wooden / round → {{a round wooden table}}']},
+{t:'Comparativo y superlativo',i:'Completa la tabla.',table:{head:['Adjetivo','Comparativo','Superlativo'],rows:[['tall','{{taller}}','{{the tallest}}'],['big','{{bigger}}','{{the biggest}}'],['easy','{{easier}}','{{the easiest}}'],['nice','{{nicer}}','{{the nicest}}'],['dangerous','{{more dangerous}}','{{the most dangerous}}'],['good','{{better}}','{{the best}}'],['bad','{{worse}}','{{the worst}}'],['far','{{further|farther}}','{{the furthest|the farthest}}'],['experienced','{{more experienced}}','{{the most experienced}}']]}},
+{t:'Comparar',i:'Completa con la forma correcta del adjetivo entre paréntesis (comparativo, superlativo o as… as).',items:[
+'Madrid is {{bigger}} than Elche. (big)','She\'s {{the most experienced}} officer in the station. (experienced)','This is {{the best}} day of my life! (good)','He isn\'t {{as tall as}} his brother. (tall)','Today the weather is {{worse}} than yesterday. (bad)','It\'s {{the most dangerous}} road in the country. (dangerous)']},
+{t:'So o such',i:'Elige so, such o such a.',note:'So + adjetivo; such (a) + adjetivo + nombre.',items:[
+'He is [[*so|such|such a]] brave!','She is [[so|such|*such a]] good officer.','They are [[so|*such|such a]] good friends.','The exam was [[*so|such|such a]] difficult.','It was [[so|such|*such a]] terrible accident.']},
+{t:'Adjetivo + preposición',i:'Completa con of, at, in, to, from, for o with.',bank:['of','at','in','to','from','for','with'],items:[
+'I\'m afraid {{of}} spiders.','He\'s very good {{at}} languages.','She\'s interested {{in}} criminology.','My sister is married {{to}} a police officer.','This case is different {{from}} the other one.','Who is responsible {{for}} the security?','I\'m tired {{of}} waiting.','We\'re very proud {{of}} you.']},
+{t:'Conectores',i:'Completa con and, but, or, because, so o because of.',bank:['and','but','or','because','so','because of'],note:'Because + oración; because of + nombre.',items:[
+'He was tired, {{so}} he went to bed.','She\'s young {{but}} very experienced.','Do you want tea {{or}} coffee?','We stayed at home {{because}} it was raining.','The flight was cancelled {{because of}} the storm.','He is tall {{and}} strong.']},
+{t:'Carácter',i:'Escribe el contrario de cada adjetivo.',cols:2,items:['honest → {{dishonest}}','polite → {{rude|impolite}}','patient → {{impatient}}','reliable → {{unreliable}}','responsible → {{irresponsible}}','friendly → {{unfriendly}}','brave → {{cowardly}}','hard-working → {{lazy}}']},
+{t:'Corrige el error',i:'Cada frase tiene un error. Escríbela bien.',items:[
+'He didn\'t went to work. → {{He didn\'t go to work.}}','Did you saw the car? → {{Did you see the car?}}','This car is more better. → {{This car is better.}}','She is as tall than me. → {{She is as tall as me.|She is as tall as I am.}}','He is so a good guard. → {{He is such a good guard.}}','She is married with a lawyer. → {{She is married to a lawyer.}}',{q:'I\'m boring. I want to go home. → {{I\'m bored. I want to go home.}}',w:'Boring = aburrido como persona.'},'We was at home. → {{We were at home.}}']}
+]});
+
+S.push({n:6,title:'Present perfect',sub:'Present perfect · For / since · Been / gone · Pasado simple o present perfect · Also / too / either · Viajes',ex:[
+{t:'Participios',i:'Escribe el participio.',cols:3,items:['be → {{been}}','go → {{gone}}','see → {{seen}}','eat → {{eaten}}','take → {{taken}}','write → {{written}}','steal → {{stolen}}','break → {{broken}}','work → {{worked}}','arrest → {{arrested}}','lose → {{lost}}','speak → {{spoken}}']},
+{t:'Present perfect',i:'Completa con el verbo en present perfect (+ afirmativa, – negativa, ? pregunta).',items:[
+'She {{has lost|\'s lost}} her keys. (lose, +)','I {{haven\'t finished|have not finished}} the report. (finish, –)','{{Have}} you {{seen}} my phone? (see, ?)','They {{have gone|\'ve gone}} to the station. (go, +)','He {{hasn\'t eaten|has not eaten}} anything. (eat, –)',{q:'{{Have}} the police {{arrived}}? (arrive, ?)',w:'Police es plural.'},'"Have you called him?" "Yes, I {{have}}."','"Has she left?" "No, she {{hasn\'t}}."']},
+{t:'Ever, never, just, already, yet',i:'Elige la opción correcta.',items:[
+'Have you [[*ever|never]] been to London?','I\'ve [[ever|*never]] seen a gun.','The train has [[*just|yet]] left.','I\'ve [[*already|yet]] called the police.','Have you finished [[already|*yet]]?','I haven\'t booked a hotel [[already|*yet]].']},
+{t:'Coloca la palabra',i:'Escribe la frase con la palabra entre paréntesis en su sitio.',note:'Ever, never, just y already van entre have y el participio; yet, al final.',items:[
+'He has left. (just) → {{He has just left.|He\'s just left.}}','Have you been to Paris? (ever) → {{Have you ever been to Paris?}}','I haven\'t finished. (yet) → {{I haven\'t finished yet.}}','We have seen this film. (already) → {{We have already seen this film.|We\'ve already seen this film.}}','She has been abroad. (never) → {{She has never been abroad.|She\'s never been abroad.}}']},
+{t:'For o since',i:'Elige for o since.',cols:2,note:'For + periodo; since + momento de inicio.',items:['[[for|*since]] 2019','[[*for|since]] three hours','[[for|*since]] Monday','[[*for|since]] a long time','[[for|*since]] I was a child','[[*for|since]] ten years']},
+{t:'Been o gone',i:'Elige been o gone.',note:'Gone: se ha ido y sigue allí; been: experiencia, ha vuelto.',items:[
+'"Where\'s Ana?" "She\'s [[been|*gone]] to the supermarket. She\'ll be back soon."','I\'ve [[*been|gone]] to Italy three times.','Have you ever [[*been|gone]] to a police station?','They aren\'t here. They\'ve [[been|*gone]] home.']},
+{t:'¿Pasado simple o present perfect?',i:'Elige la opción correcta. Fíjate en las expresiones de tiempo.',items:[
+{q:'I [[*saw|have seen]] him yesterday.',w:'Yesterday.'},{q:'[[Did you ever see|*Have you ever seen]] a ghost?',w:'Ever, experiencia.'},{q:'She [[worked|*has worked]] here since 2018.',w:'Since, hasta ahora.'},{q:'When [[*did you arrive|have you arrived]]?',w:'When…?'},{q:'They [[*bought|have bought]] the car two years ago.',w:'Ago.'},{q:'I [[didn\'t finish|*haven\'t finished]] yet.',w:'Yet.'},{q:'He [[*lived|has lived]] in Madrid in 2015.',w:'In 2015, momento terminado.'},{q:'How long [[did you know|*have you known]] him?',w:'How long…? hasta ahora.'}]},
+{t:'Pregunta y respuesta',i:'Completa con el verbo en present perfect o en pasado simple.',items:[
+{q:'"{{Have}} you ever {{been}} to Portugal?" (be)',w:'Experiencia.'},{q:'"Yes, I {{have}}. I {{went}} there in 2021." (go)',w:'In 2021 → pasado simple.'},{q:'"What {{did}} you {{do}} there?" (do)',w:'Pregunta sobre ese viaje concreto.'},{q:'"I {{visited}} Lisbon and Porto. I {{\'ve been|have been}} back three times since then." (visit / be)',w:'Since then → present perfect.'}]},
+{t:'Completa el informe',i:'Pon cada verbo en pasado simple o en present perfect.',items:[
+{q:'Agent García {{has worked|\'s worked}} (work) in this station since 2015.',w:'Since 2015.'},{q:'Last night she {{received}} (receive) a call about a robbery.',w:'Last night.'},{q:'She {{went}} (go) to the shop and {{spoke}} (speak) to the owner.',w:'Historia de anoche.'},{q:'The police {{haven\'t found|have not found}} (not find) the thief yet,',w:'Yet.'},{q:'but they {{have already checked|\'ve already checked}} (already / check) the cameras.',w:'Already.'},{q:'Agent García {{has never seen|\'s never seen}} (never / see) a case like this before.',w:'Never, experiencia.'}]},
+{t:'Also, too, as well, either',i:'Completa con also, too o either. A veces hay dos opciones posibles.',note:'Either en negativas; also delante del verbo y detrás de be.',items:[
+'I haven\'t been to Rome, and I haven\'t been to Paris {{either}}.','She speaks English. She {{also}} speaks French.','I\'ve seen the film, and my brother has seen it {{too|as well}}.','He didn\'t call, and he didn\'t send a message {{either}}.','We are {{also}} guards.']},
+{t:'Viajes y fronteras',i:'Traduce al inglés.',cols:2,items:['tarjeta de embarque → {{boarding pass}}','aduana → {{customs}}','equipaje → {{luggage|baggage}}','retraso → {{delay}}','puerta de embarque → {{gate}}','aterrizar → {{land}}','al extranjero → {{abroad}}','perder (un vuelo) → {{miss}}']},
+{t:'Corrige el error',i:'Cada frase tiene un error. Escríbela bien.',items:[
+'I have went to London. → {{I have gone to London.|I have been to London.|I\'ve been to London.|I\'ve gone to London.}}','She have seen the car. → {{She has seen the car.}}','Have you saw my keys? → {{Have you seen my keys?}}','I have seen him yesterday. → {{I saw him yesterday.}}','She has worked here since five years. → {{She has worked here for five years.}}','I haven\'t never been abroad. → {{I\'ve never been abroad.|I haven\'t ever been abroad.|I have never been abroad.}}','I haven\'t seen it too. → {{I haven\'t seen it either.}}','He went to abroad last year. → {{He went abroad last year.}}']}
+]});
+
+S.push({n:7,title:'Pasado continuo',sub:'Pasado continuo · Simple o continuo · Tres tiempos · When / while / during · Conectores de tiempo · Accidentes',ex:[
+{t:'Pasado continuo',i:'Completa con was / were + -ing (+ afirmativa, – negativa, ? pregunta).',items:[
+'At 10 p.m. I {{was watching}} TV. (watch, +)','They {{were driving}} too fast. (drive, +)','He {{wasn\'t wearing|was not wearing}} a helmet. (wear, –)','{{Were}} you {{sleeping}} when I called? (sleep, ?)','We {{weren\'t paying|were not paying}} attention. (pay, –)','What {{was}} she {{doing}} at the station? (do, ?)','"Were they running?" "Yes, they {{were}}."','"Was it raining?" "No, it {{wasn\'t}}."']},
+{t:'¿Simple o continuo?',i:'Elige la opción correcta.',items:[
+{q:'I [[drove|*was driving]] when the phone rang.',w:'Acción larga interrumpida.'},{q:'While we [[had|*were having]] dinner, the lights went out.',w:'While + acción larga.'},{q:'She [[*broke|was breaking]] her leg while she was skiing.',w:'Acción corta.'},{q:'When I saw the accident, I [[*called|was calling]] 112.',w:'Una acción tras otra.'},{q:'It [[rained|*was raining]] when we left the house.',w:'Fondo de la escena.'},{q:'What [[did you do|*were you doing]] at 9 last night?',w:'En desarrollo a las 9.'},{q:'I [[*knew|was knowing]] the answer.',w:'Verbo de estado.'},{q:'When the police arrived, the thief [[ran|*was running]] away.',w:'Ya estaba huyendo.'}]},
+{t:'Une las frases',i:'Une las dos frases con when o while.',items:[
+'I was walking home. I saw an accident. (while)\n{{While I was walking home, I saw an accident.|I saw an accident while I was walking home.}}','She was sleeping. The alarm went off. (when)\n{{She was sleeping when the alarm went off.}}','They were playing football. It started to rain. (while)\n{{While they were playing football, it started to rain.|It started to rain while they were playing football.}}','He was having a shower. Someone knocked at the door. (when)\n{{He was having a shower when someone knocked at the door.}}']},
+{t:'Completa el atestado',i:'Pon cada verbo en pasado simple o en pasado continuo.',items:[
+{q:'Yesterday at 8 p.m. it {{was raining}} (rain) and the roads were wet.',w:'Fondo.'},{q:'A man {{was driving}} (drive) home when a dog {{ran}} (run) into the road.',w:'Acción larga + acción corta.'},'The car {{skidded}} (skid) and {{crashed}} (crash) into a tree.',{q:'Two pedestrians {{were waiting}} (wait) at the bus stop and they {{saw}} (see) everything.',w:'Fondo + acción.'},'One of them {{called}} (call) an ambulance.']},
+{t:'During, while o for',i:'Elige during, while o for.',note:'During + nombre; while + sujeto y verbo; for + periodo.',items:[
+'I fell asleep [[*during|while|for]] the film.','[[During|*While|For]] I was sleeping, someone took my bag.','We waited [[during|while|*for]] two hours.','Nobody spoke [[*during|while|for]] the meeting.','He was listening to music [[during|*while|for]] he was driving.','It rained [[*during|while|for]] the night.']},
+{t:'Conectores de tiempo',i:'Completa con when, as soon as, before, after o until.',bank:['when','as soon as','before','after','until'],items:[
+'Call me {{as soon as|when}} you arrive.','We waited {{until}} the police arrived.','Lock the door {{before}} leaving.','{{After}} the accident, we called 112.','{{When}} I was a child, I lived in Elche.']},
+{t:'Accidentes de tráfico',i:'Traduce al inglés.',cols:2,items:['atropellar → {{run over}}','adelantar → {{overtake}}','chocar contra → {{crash into}}','derrapar → {{skid}}','semáforo → {{traffic lights|traffic light}}','paso de cebra → {{zebra crossing}}','peatón → {{pedestrian}}','herido (accidente) → {{injured}}','cinturón de seguridad → {{seatbelt|seat belt}}','testigo → {{witness}}']},
+{t:'Corrige el error',i:'Cada frase tiene un error. Escríbela bien.',items:[
+'He was drive too fast. → {{He was driving too fast.}}','They was running. → {{They were running.}}','I was knowing the answer. → {{I knew the answer.}}','While I walked home, I was seeing an accident. → {{While I was walking home, I saw an accident.}}','During I was sleeping, someone broke in. → {{While I was sleeping, someone broke in.}}',{q:'Three people were wounded in the car accident. → {{Three people were injured in the car accident.}}',w:'Wounded: con arma.'},'The passenger was crossing the street when the car hit him. → {{The pedestrian was crossing the street when the car hit him.}}','The traffic light were red. → {{The traffic lights were red.}}']},
+{t:'Expresiones de tiempo en +, – y ?',i:'Escribe cada frase en negativa y en pregunta.',items:[
+'At 9 p.m. you were working.\n(–) {{You weren\'t working at 9 p.m.|At 9 p.m. you weren\'t working.}}\n(?) {{Were you working at 9 p.m.?|At 9 p.m. were you working?}}',
+'This time yesterday they were driving to Madrid.\n(–) {{They weren\'t driving to Madrid this time yesterday.|This time yesterday they weren\'t driving to Madrid.}}\n(?) {{Were they driving to Madrid this time yesterday?}}',
+'At that moment she was talking on the phone.\n(–) {{She wasn\'t talking on the phone at that moment.|At that moment she wasn\'t talking on the phone.}}\n(?) {{Was she talking on the phone at that moment?}}',
+'He was studying all night.\n(–) {{He wasn\'t studying all night.}}\n(?) {{Was he studying all night?}}']},
+{t:'Tres tiempos',i:'Elige pasado simple, pasado continuo o present perfect.',items:[
+{q:'I [[*saw|was seeing|have seen]] him two days ago.',w:'Ago → pasado simple.'},{q:'At 11 p.m. yesterday they [[waited|*were waiting|have waited]] in the car.',w:'At 11 p.m. → en desarrollo.'},{q:'[[Did you ever get|Were you ever getting|*Have you ever got]] a speeding ticket?',w:'Ever → present perfect.'},{q:'While I [[wrote|*was writing|have written]] the report, the phone rang.',w:'While + acción larga.'},{q:'She [[worked|was working|*has worked]] in this station since 2019.',w:'Since → present perfect.'},{q:'When the police arrived, the thief [[has escaped|*was escaping|escapes]].',w:'Estaba huyendo en ese momento.'},{q:'I [[was knowing|*knew|have known]] the answer, so I didn\'t ask.',w:'Know: verbo de estado.'},{q:'"Where\'s Luis?" "He [[went|was going|*has gone]] to the hospital."',w:'Gone: está allí ahora.'}]}
+]});
+
+S.push({n:8,title:'El futuro',sub:'Repaso de tiempos · Will · Be going to · Presente continuo de futuro · Falsos amigos · Preposiciones y conectores · Operativos',ex:[
+{t:'Repaso de tiempos',i:'Elige la opción correcta. Busca primero la pista de la frase.',items:[
+{q:'He usually [[*works|is working]] nights.',w:'Usually.'},{q:'Listen! Someone [[shouts|*is shouting]].',w:'Listen!'},{q:'I [[have seen|*saw]] the film last night.',w:'Last night.'},{q:'[[Did you ever go|*Have you ever been]] to Rome?',w:'Ever.'},{q:'At 9 p.m. we [[patrolled|*were patrolling]] the town.',w:'At 9 p.m.'},{q:'She [[works|*has worked]] here since 2018.',w:'Since.'},{q:'While I [[drove|*was driving]], the phone rang.',w:'While + acción larga.'},{q:'I [[*know|am knowing]] the answer.',w:'Verbo de estado.'},{q:'They [[didn\'t finish|*haven\'t finished]] yet.',w:'Yet.'},{q:'We [[*went|have gone]] to London two years ago.',w:'Ago.'}]},
+{t:'Will',i:'Completa con will / won\'t y el verbo (+ afirmativa, – negativa, ? pregunta).',items:[
+'"The phone\'s ringing." "I {{\'ll answer|will answer}} it." (answer, +)','I promise I {{won\'t tell|will not tell}} anyone. (tell, –)','I think it {{will rain|\'ll rain}} tomorrow. (rain, +)','{{Will}} you {{help}} me with this box? (help, ?)','Don\'t worry, I {{won\'t be|will not be}} late. (be, –)','What {{will}} you {{do}} next year? (do, ?)']},
+{t:'Be going to',i:'Completa con am / is / are going to y el verbo.',items:[
+'We {{are going to buy|\'re going to buy}} a new car. We\'ve decided. (buy, +)','Look at those clouds! It {{\'s going to rain|is going to rain}}. (rain, +)','She {{is going to apply|\'s going to apply}} for the Guardia Civil this year. (apply, +)','They {{aren\'t going to wait|are not going to wait|\'re not going to wait}} any longer. (wait, –)','{{Are}} you {{going to call}} him? (call, ?)','Slow down! You {{\'re going to crash|are going to crash}}! (crash, +)']},
+{t:'Will, going to o presente continuo',i:'Elige la opción correcta.',items:[
+{q:'"I\'m thirsty." "I [[*\'ll get|\'m going to get]] you some water."',w:'Decisión en el momento.'},{q:'I [[\'ll meet|*\'m meeting]] the captain at 10 tomorrow. It\'s in my diary.',w:'Cita en la agenda.'},{q:'Be careful! You [[will|*are going to]] fall!',w:'Pruebas: lo estoy viendo.'},{q:'I think Spain [[*will win|is winning]] the match.',w:'I think + opinión.'},{q:'We\'ve decided: we [[\'ll move|*\'re going to move]] to Elche.',w:'Ya decidido.'},{q:'"It\'s dark in here." "OK, I [[*\'ll turn|\'m turning]] on the light."',w:'Decisión en el momento.'},{q:'They [[get|*\'re getting]] married in June. They\'ve booked the church.',w:'Plan organizado.'},{q:'I don\'t think he [[*will pass|is passing]] the exam. He hasn\'t studied.',w:'I don\'t think + will.'}]},
+{t:'La agenda del cabo García',i:'Mira la agenda y escribe frases en presente continuo con valor de futuro.',items:[
+'08:00 · briefing with the team → At 8 he {{\'s having a briefing with the team.|is having a briefing with the team.}}','10:30 · meet the captain → At half past ten he {{\'s meeting the captain.|is meeting the captain.}}','13:00 · have lunch with Ana → At one o\'clock he {{\'s having lunch with Ana.|is having lunch with Ana.}}','17:00 · fly to Madrid → At five he {{\'s flying to Madrid.|is flying to Madrid.}}']},
+{t:'When, as soon as, until… + presente',i:'Pon el verbo en la forma correcta.',note:'Después de when, as soon as, until y before: presente, nunca will.',items:[
+'I\'ll call you when I {{arrive}} (arrive).','As soon as the patrol {{gets}} (get) here, we\'ll start.','We won\'t leave until the police {{come}} (come).','Before you {{go}} (go), lock the door.','I\'ll tell you when I {{know}} (know) the results.']},
+{t:'Corrige el error',i:'Cada frase tiene un error. Escríbela bien.',items:[
+'I will to call you tomorrow. → {{I will call you tomorrow.|I\'ll call you tomorrow.}}','She going to apply for the job. → {{She\'s going to apply for the job.|She is going to apply for the job.}}','I\'ll tell you when I will know. → {{I\'ll tell you when I know.}}','You will can drive next year. → {{You\'ll be able to drive next year.|You will be able to drive next year.}}','I\'m going stay at home. → {{I\'m going to stay at home.}}','He wills come tomorrow. → {{He will come tomorrow.}}',{q:'"Will you help me?" "Yes, I\'ll." → {{"Yes, I will."|Yes, I will.}}',w:'En respuesta corta no se contrae.'},'I\'ll be back after two hours. → {{I\'ll be back in two hours.}}']},
+{t:'Falsos amigos',i:'Traduce al inglés. ¡Cuidado con la trampa!',cols:2,items:['en realidad → {{actually}}','actualmente → {{currently|nowadays|at present}}','biblioteca → {{library}}','librería → {{bookshop|bookstore}}','alfombra → {{carpet|rug}}','carpeta → {{folder}}','fingir → {{pretend}}','discusión, pelea → {{argument}}','éxito → {{success}}','salida → {{exit|way out}}','sensato → {{sensible}}','tener un resfriado → {{have a cold}}']},
+{t:'Preposiciones',i:'Completa con in, on, at, to, by, until, for, since o ago.',bank:['in','on','at','to','by','until','for','since','ago'],items:[
+'I\'ll be back {{in}} two hours.','The report must be ready {{by}} Friday.','We\'ll wait here {{until}} 6 o\'clock.','See you {{on}} Monday.','I\'ve been {{to}} London three times.','She\'s worked here {{since}} 2019.','I saw him two days {{ago}}.','I\'m {{on}} the bus. I\'ll be there soon.','We\'ve lived here {{for}} ten years.','The meeting is {{at}} 9 o\'clock.']},
+{t:'Conectores',i:'Completa con because, because of, so, either, too, while o during.',bank:['because','because of','so','either','too','while','during'],items:[
+'The match was cancelled {{because of}} the rain.','I was tired, {{so}} I went to bed.','I didn\'t call, and he didn\'t call {{either}}.','She speaks English and French {{too}}.','Someone stole my bag {{while}} I was shopping.','Nobody spoke {{during}} the meeting.','We stayed at home {{because}} it was raining.']},
+{t:'Operativos',i:'Traduce al inglés.',cols:2,items:['patrulla → {{patrol}}','control (de paso) → {{checkpoint}}','turno → {{shift}}','de servicio → {{on duty}}','refuerzos → {{backup|reinforcements}}','reunión informativa → {{briefing}}','redada → {{raid}}','orden judicial → {{warrant}}','vigilancia → {{surveillance}}','desplegar → {{deploy}}']}
+]});
+
+S.push({n:90,slug:'repaso-tiempos',mix:true,title:'Todos los tiempos verbales',sub:'Presente simple · Presente continuo · Pasado simple · Pasado continuo · Present perfect · Will · Going to',ex:[
+{t:'¿Qué tiempo pide la pista?',i:'Elige el tiempo verbal que suele ir con cada expresión.',note:'Rutina → presente simple · ahora → presente continuo · momento terminado → pasado simple · en ese momento del pasado → pasado continuo · experiencia o hasta ahora → present perfect · después de hoy → futuro.',na:true,items:[
+'every day → [[*presente simple|presente continuo|pasado simple|pasado continuo|present perfect|futuro]]',
+'right now → [[presente simple|*presente continuo|pasado simple|pasado continuo|present perfect|futuro]]',
+'yesterday → [[presente simple|presente continuo|*pasado simple|pasado continuo|present perfect|futuro]]',
+'at 9 p.m. yesterday → [[presente simple|presente continuo|pasado simple|*pasado continuo|present perfect|futuro]]',
+'ever / never → [[presente simple|presente continuo|pasado simple|pasado continuo|*present perfect|futuro]]',
+'since 2019 → [[presente simple|presente continuo|pasado simple|pasado continuo|*present perfect|futuro]]',
+'tomorrow → [[presente simple|presente continuo|pasado simple|pasado continuo|present perfect|*futuro]]',
+'Look! / Listen! → [[presente simple|*presente continuo|pasado simple|pasado continuo|present perfect|futuro]]',
+'two days ago → [[presente simple|presente continuo|*pasado simple|pasado continuo|present perfect|futuro]]',
+'usually / often → [[*presente simple|presente continuo|pasado simple|pasado continuo|present perfect|futuro]]',
+'while I was… → [[presente simple|presente continuo|pasado simple|*pasado continuo|present perfect|futuro]]',
+'already / yet → [[presente simple|presente continuo|pasado simple|pasado continuo|*present perfect|futuro]]',
+'next week → [[presente simple|presente continuo|pasado simple|pasado continuo|present perfect|*futuro]]']},
+{t:'Test tipo examen',i:'Elige la opción correcta. Busca primero la pista de tiempo.',items:[
+{q:'She [[*goes|is going|went|has gone]] to work by bus every day.',w:'Every day → presente simple.'},
+{q:'Be quiet! The baby [[sleeps|*is sleeping|slept|has slept]].',w:'Be quiet! → está pasando ahora.'},
+{q:'I [[have seen|*saw|was seeing|see]] him last week.',w:'Last week → pasado simple.'},
+{q:'[[Did you ever been|*Have you ever been|Were you ever going|Do you ever been]] to Paris?',w:'Ever, experiencia → present perfect.'},
+{q:'At 10 p.m. yesterday we [[had|have had|*were having|are having]] dinner.',w:'At 10 p.m. yesterday → en desarrollo.'},
+{q:'She [[works|worked|*has worked|is working]] here since 2020.',w:'Since → present perfect.'},
+{q:'I think it [[*will rain|rains|is raining|rained]] tomorrow.',w:'I think + predicción → will.'},
+{q:'Look at those clouds! It [[will rain|*is going to rain|rains|rained]].',w:'Predicción con pruebas → going to.'},
+{q:'While I [[drove|*was driving|have driven|drive]], the phone rang.',w:'While + acción larga → continuo.'},
+{q:'He [[*doesn\'t like|isn\'t liking|didn\'t like|hasn\'t liked]] coffee. He prefers tea.',w:'Like es verbo de estado y habla de un gusto actual.'},
+{q:'"Where\'s Ana?" "She [[went|*has gone|goes|was going]] to the bank."',w:'Gone: se ha ido y sigue allí.'},
+{q:'I [[meet|*\'m meeting|met|have met]] the captain at 10 tomorrow. It\'s in my diary.',w:'Cita fijada → presente continuo.'},
+{q:'They [[have caught|*caught|catch|were catching]] the thief two hours ago.',w:'Ago → pasado simple.'},
+{q:'How often [[*do you go|are you going|did you go|have you gone]] to the gym?',w:'How often → rutina.'},
+{q:'I [[*\'ve lost|was losing|lose|\'m losing]] my keys. I can\'t open the door.',w:'Resultado ahora → present perfect.'},
+{q:'"The phone\'s ringing." "I [[*\'ll answer|\'m going to answer|answer|answered]] it."',w:'Decisión en el momento → will.'}]},
+{t:'Completa con el tiempo adecuado',i:'Pon el verbo entre paréntesis en el tiempo que pide la frase.',items:[
+'My brother {{works}} in a bank. He goes there every day. (work)','Shh! I {{\'m talking|am talking}} on the phone. (talk)','We {{went}} to Madrid last weekend. (go)','I {{was sleeping}} when the alarm went off. (sleep)','She {{has never been|\'s never been}} to London. (never / be)',{q:'I {{\'m going to study|am going to study}} for the exam tonight. I\'ve decided. (study)',w:'Plan ya decidido → going to.'},{q:'"It\'s cold in here." "I {{\'ll close|will close}} the window." (close)',w:'Decisión en el momento → will.'},'They {{have lived|\'ve lived}} here for ten years. (live)','What {{were}} you {{doing}} at 8 last night? (do)','{{Did}} you {{see}} the match yesterday? (see)','He {{doesn\'t usually drive|does not usually drive}} to work. (not / usually / drive)','Look! Those men {{are running|\'re running}} away. (run)']},
+{t:'Un verbo, siete tiempos',i:'Completa con el verbo work en el tiempo que indica la pista.',items:[
+'I {{work}} every day from 8 to 3. (rutina)','I {{\'m working|am working}} now. Call me later. (ahora)','I {{worked}} at the station yesterday. (ayer)','I {{was working}} at 10 p.m. yesterday. (en ese momento)','I {{\'ve worked|have worked}} here since 2019. (hasta ahora)','I {{\'ll work|will work}} tomorrow if you need me. (ofrecimiento)','I {{\'m going to work|am going to work}} in Madrid next year. I\'ve decided. (plan)']},
+{t:'El auxiliar de la pregunta',i:'Elige el auxiliar que necesita cada pregunta.',note:'Do / does → presente simple · am / is / are → presente continuo y going to · did → pasado simple · was / were → pasado continuo · have / has → present perfect · will → futuro.',items:[
+'[[*Do|Are|Did|Have]] you live near here?','[[Does|*Is|Has|Did]] she working today?','[[*Did|Were|Have|Do]] they call the police yesterday?','[[Did|*Were|Have|Are]] you sleeping when I called?','[[Did|Do|*Have|Are]] you ever seen a ghost?','[[Do|*Will|Are|Have]] you help me, please?','[[*Are|Do|Will|Have]] you going to apply this year?','[[Does|Did|*Has|Is]] he finished the report yet?','What time [[*does|is|has|do]] the train leave?','Where [[did|*were|have|do]] you going when I saw you?']},
+{t:'Pasa a negativa',i:'Escribe cada frase en negativa.',note:'Detrás de don\'t, doesn\'t y didn\'t el verbo va en infinitivo.',items:[
+'She works at night. → {{She doesn\'t work at night.}}','They are watching TV. → {{They aren\'t watching TV.|They\'re not watching TV.}}','He went to the party. → {{He didn\'t go to the party.}}','We were driving fast. → {{We weren\'t driving fast.}}','I have finished. → {{I haven\'t finished.}}','It will rain. → {{It won\'t rain.}}','She is going to call. → {{She isn\'t going to call.|She\'s not going to call.}}','I saw the car. → {{I didn\'t see the car.}}']},
+{t:'Respuestas cortas',i:'Completa la respuesta corta.',note:'Se repite el auxiliar de la pregunta. En afirmativa no se contrae: Yes, I am / Yes, I have.',items:[
+'"Do you work here?" "Yes, I {{do}}."','"Is she working?" "No, she {{isn\'t}}."','"Did they arrive?" "Yes, they {{did}}."','"Were you sleeping?" "No, I {{wasn\'t}}."','"Have you finished?" "Yes, I {{have}}."','"Will you help me?" "Yes, I {{will}}."','"Does he smoke?" "No, he {{doesn\'t}}."','"Are you going to apply?" "Yes, I {{am}}."']},
+{t:'El atestado de la agente López',i:'Pon cada verbo en el tiempo adecuado. El texto mezcla todos los tiempos.',items:[
+{q:'Agent López {{has worked|\'s worked}} (work) at this station since 2018.',w:'Since → present perfect.'},
+{q:'She usually {{patrols}} (patrol) the town centre in the mornings.',w:'Usually → presente simple.'},
+{q:'Yesterday at 11 a.m. she {{was patrolling}} (patrol) Calle Mayor when she {{heard}} (hear) a shout.',w:'Acción larga + acción corta.'},
+{q:'A man {{was running}} (run) out of a jewellery shop with a bag.',w:'Lo que estaba pasando → continuo.'},
+{q:'She {{followed}} (follow) him and {{caught}} (catch) him two streets away.',w:'Una acción tras otra → pasado simple.'},
+{q:'The police {{haven\'t found|have not found}} (not find) the jewels yet.',w:'Yet → present perfect.'},
+{q:'Right now, the suspect {{is waiting|\'s waiting}} (wait) in a cell.',w:'Right now → presente continuo.'},
+{q:'Tomorrow he {{is seeing|\'s seeing|is going to see|\'s going to see}} (see) the judge. It\'s already arranged.',w:'Plan fijado → presente continuo o going to.'},
+{q:'Agent López says: "I think we {{will find|\'ll find}} (find) the jewels soon."',w:'I think + predicción → will.'}]},
+{t:'Corrige el error',i:'Cada frase tiene un error. Escríbela bien.',items:[
+'She don\'t work on Sundays. → {{She doesn\'t work on Sundays.}}',{q:'I am knowing the answer. → {{I know the answer.}}',w:'Verbo de estado.'},'I have seen him yesterday. → {{I saw him yesterday.}}','Did you went to the party? → {{Did you go to the party?}}','While I drove, the phone rang. → {{While I was driving, the phone rang.}}','She has worked here since three years. → {{She has worked here for three years.}}','I will to call you. → {{I will call you.|I\'ll call you.}}','Look! It rains. → {{Look! It\'s raining.|Look! It is raining.}}',{q:'When I will arrive, I\'ll call you. → {{When I arrive, I\'ll call you.}}',w:'Después de when, presente.'},{q:'He is working here since 2019. → {{He has worked here since 2019.|He\'s worked here since 2019.|He has been working here since 2019.}}',w:'Since → present perfect.'}]}
+]});
+
+S.sort((a,b)=>a.n-b.n);
+const PENDING={};
+const hashOf=s=>s.slug||'sesion-'+s.n;
+
+/* ---------- utilidades ---------- */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const SPK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+
+function parse(str){
+  const out=[];let last=0;const re=/\{\{(.+?)\}\}|\[\[(.+?)\]\]|\n/g;let m;
+  while((m=re.exec(str))){
+    if(m.index>last)out.push({t:'txt',v:str.slice(last,m.index)});
+    if(m[1]!==undefined)out.push({t:'gap',ans:m[1].split('|')});
+    else if(m[2]!==undefined){const o=m[2].split('|');let c=o.findIndex(x=>x[0]==='*');out.push({t:'ch',opts:o.map(x=>x.replace(/^\*/,'')),c});}
+    else out.push({t:'br'});
+    last=re.lastIndex;
+  }
+  if(last<str.length)out.push({t:'txt',v:str.slice(last)});
+  return out;
+}
+function norm(s){
+  s=String(s).toLowerCase().replace(/[’‘´`]/g,"'").replace(/[“”"«»]/g,'').replace(/\s+/g,' ').trim();
+  s=s.replace(/won't/g,'will not').replace(/can't/g,'can not').replace(/cannot/g,'can not').replace(/shan't/g,'shall not')
+     .replace(/n't/g,' not').replace(/'m\b/g,' am').replace(/'re\b/g,' are').replace(/'ve\b/g,' have').replace(/'ll\b/g,' will').replace(/'d\b/g,' would');
+  s=s.replace(/[.,!?;:]+/g,' ').replace(/\s+/g,' ').trim();
+  return s;
+}
+function variants(s){const n=norm(s);if(!/'s\b/.test(n))return [n];return [n.replace(/'s\b/g,' is'),n.replace(/'s\b/g,' has'),n].map(x=>x.replace(/\s+/g,' ').trim());}
+function match(val,ans){if(!val||!val.trim())return null;const v=variants(val);return ans.some(a=>{const av=variants(a);return v.some(x=>av.includes(x));});}
+
+/* ---------- estado ---------- */
+let cur=null, st=null, REG=[], lastFocus=null;
+const key=n=>'mp_gc_f2_'+n;
+function load(n){st=store.get(key(n))||{v:{},c:{},done:{},open:{}};st.v=st.v||{};st.c=st.c||{};st.done=st.done||{};st.open=st.open||{};}
+function save(){store.set(key(cur.n),st);renderSide();updSummary();}
+function sessStats(sess,s){
+  s=s||store.get(key(sess.n))||{done:{}};const d=s.done||{};let checked=0,ok=0,tot=0;
+  sess.ex.forEach((e,i)=>{const x=d[i];if(x&&(x.checked||x.openDone)){checked++;}if(x&&x.checked&&!x.revealed&&x.tot){ok+=x.ok;tot+=x.tot;}});
+  return {checked,n:sess.ex.length,pct:tot?Math.round(ok/tot*100):null};
+}
+
+/* ---------- barra lateral ---------- */
+function renderSide(){
+  const ul=$('#slist');const nums=[...S.map(s=>s.n),...Object.keys(PENDING).map(Number)].sort((a,b)=>a-b);
+  ul.innerHTML=nums.map(n=>{const mx=S.find(s=>s.n===n&&s.mix);
+    const sess=S.find(s=>s.n===n);
+    if(!sess)return `<li><button class="sbtn off" type="button" disabled><span class="n">${n}</span><span><span class="tt">${esc(PENDING[n])}<span class="soon">Pronto</span></span></span></button></li>`;
+    const t=sessStats(sess,cur&&cur.n===n?st:null);const w=Math.round(t.checked/t.n*100);
+    return `${mx?'<li class="sep" aria-hidden="true">Repaso</li>':''}<li><button class="sbtn${mx?' mixb':''}" type="button" title="${esc((mx?'Repaso · ':'Sesión '+n+' · ')+sess.title)}" data-go="${hashOf(sess)}" aria-current="${cur&&cur.n===n}"><span class="n">${mx?'R':n}</span><span><span class="tt">${esc(sess.title)}</span><span class="bar" aria-hidden="true"><i style="width:${w}%"></i></span></span></button></li>`;
+  }).join('');
+}
+
+/* ---------- render de la sesión ---------- */
+function partsHTML(parts,ei,iid,u){
+  let html='<span class="ln">';
+  parts.forEach(p=>{
+    if(p.t==='txt')html+=esc(p.v);
+    else if(p.t==='br')html+='</span><span class="ln">';
+    else if(p.t==='gap'){
+      const id=`g${ei}_${iid}_${u.gaps.length}`;const L=Math.max(...p.ans.map(a=>a.length));
+      const long=L>24||(parts.some(x=>x.t==='br')&&L>12);u.gaps.push({id,ans:p.ans});
+      html+=`<input class="gap${long?' long':''}" id="${id}" data-ex="${ei}" data-l="${L}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Respuesta">`;
+    }else{
+      const id=`c${ei}_${iid}_${u.chs.length}`;u.chs.push({id,opts:p.opts,c:p.c});
+      html+=`<span class="choice" role="group" aria-label="Opciones" id="${id}">`+p.opts.map((o,k)=>`<button type="button" class="opt" data-ch="${id}" data-k="${k}" data-ex="${ei}">${esc(o)}</button>`).join('')+'</span>';
+    }
+  });
+  return html+'</span>';
+}
+function speakText(parts,all){
+  let s=parts.map(p=>p.t==='txt'?p.v:p.t==='br'?' ':p.t==='gap'?p.ans[0]:'\u0001'+p.opts[p.c]).join('');
+  if(!all&&s.includes('→')){const seg=s.split('→');const after=seg[seg.length-1].trim();s=/^\u0001[^ ]*$/.test(after)?seg[0]:after;}
+  return s.replace(/\u0001/g,'').replace(/\([^)]*\)/g,' ').replace(/·/g,',').replace(/\s+/g,' ').trim();
+}
+function renderSession(n){
+  const sess=S.find(s=>s.n===n)||S[0];cur=sess;load(sess.n);REG=[];
+  const m=$('#main');
+  let h=`<div class="eyebrow">${sess.mix?'Repaso · Sesiones 2 a 8':'Ficha de ejercicios · Sesión '+sess.n}</div><h1>${esc(sess.title)}</h1>
+  <ul class="topics">${sess.sub.split('·').map(t=>`<li>${esc(t.trim())}</li>`).join('')}</ul>
+  <div class="summary">
+    <div class="tile"><div class="k">Ejercicios hechos</div><div class="v" id="sDone">0</div></div>
+    <div class="tile"><div class="k">Aciertos</div><div class="v" id="sPct">–</div></div>
+    <div class="tile"><div class="k">Para repasar</div><div class="v" id="sBad">0</div></div>
+    <div class="actions">
+      <button class="btn sm" type="button" data-act="help">Cómo funciona</button>
+      <button class="btn sm" type="button" data-act="resetall">Empezar de nuevo</button>
+    </div>
+  </div>
+`;
+  sess.ex.forEach((e,ei)=>{
+    const reg={units:[],open:!!e.open,say:e.say};REG.push(reg);
+    h+=`<article class="ex" id="ex${ei}" data-ex="${ei}"><header class="ex-h"><div class="ex-n">${ei+1}</div><div><div class="ex-t">${esc(e.t)}</div><div class="ex-i">${esc(e.i)}</div></div><span class="score" id="sc${ei}" hidden></span></header>`;
+    if(e.bank)h+=`<div class="bank"><span class="l">Pulsa para escribir:</span>${e.bank.map(b=>`<button type="button" class="chip" data-bank="${esc(b)}" data-ex="${ei}">${esc(b)}</button>`).join('')}</div>`;
+    if(e.note)h+=`<div class="note">${esc(e.note)}</div>`;
+    if(e.open){
+      h+=`<div class="open"><label class="count" for="op${ei}">Escribe aquí tu texto en inglés</label><textarea id="op${ei}" data-open="${ei}" spellcheck="true" lang="en"></textarea>
+      <div class="model" id="md${ei}"><div><div class="lab">RESPUESTA MODELO</div><div lang="en">${esc(e.open)}</div></div><button type="button" class="say" data-say="${esc(e.open)}" aria-label="Escuchar el modelo">${SPK}</button></div></div>
+      <div class="ex-f"><button class="btn or" type="button" data-act="model" data-ex="${ei}">Ver respuesta modelo</button><span class="count" id="cnt${ei}"></span></div>`;
+    }else if(e.table){
+      h+=`<div class="tablewrap"><table class="grid"><thead><tr>${e.table.head.map(x=>`<th scope="col">${esc(x)}</th>`).join('')}</tr></thead><tbody>`;
+      e.table.rows.forEach((row,ri)=>{const u={gaps:[],chs:[],why:null,speak:null,iid:ri};reg.units.push(u);
+        h+=`<tr>${row.map(c=>`<td lang="en">${partsHTML(parse(c),ei,ri,u)}</td>`).join('')}</tr>`;});
+      h+=`</tbody></table></div><div class="fb" id="tfb${ei}" style="margin:0 18px"></div>`;
+      h+=footer(ei);
+    }else{
+      h+=`<div class="items${e.cols?' c'+e.cols:''}">`;
+      e.items.forEach((it,ii)=>{const q=typeof it==='string'?it:it.q,w=typeof it==='string'?null:it.w;const parts=parse(q);
+        const u={gaps:[],chs:[],why:w,iid:ii};const body=partsHTML(parts,ei,ii,u);u.speak=speakText(parts,e.say==='all');reg.units.push(u);
+        h+=`<div class="it" id="it${ei}_${ii}"><span class="num">${ii+1}.</span><div class="q" lang="en">${body}</div>${e.na?'<span></span>':`<button type="button" class="say" data-say="${esc(u.speak)}" aria-label="Escuchar la frase">${SPK}</button>`}<div class="fb" id="fb${ei}_${ii}"></div></div>`;});
+      h+=`</div>`+footer(ei);
+    }
+    h+=`</article>`;
+  });
+  m.innerHTML=h;
+  $$('.ex',m).forEach(ex=>{const gs=$$('input.gap:not(.long)',ex);const L=Math.max(6,...gs.map(g=>+g.dataset.l));gs.forEach(g=>g.style.width=`calc(${L+2}ch + 12px)`);});
+  restore();renderSide();updSummary();
+}
+function footer(ei){return `<div class="ex-f"><button class="btn pri ck" type="button" data-act="check" data-ex="${ei}">Corregir</button><button class="btn retry" type="button" data-act="retry" data-ex="${ei}" hidden>Repetir lo fallado</button><button class="btn rv" type="button" data-act="reveal" data-ex="${ei}">Ver soluciones</button><button class="btn sm" type="button" data-act="clear" data-ex="${ei}">Borrar</button><span class="msg" id="msg${ei}" role="status"></span></div>`;}
+
+function restore(){
+  Object.entries(st.v).forEach(([id,v])=>{const el=document.getElementById(id);if(el)el.value=v;});
+  Object.entries(st.c).forEach(([id,k])=>{const g=document.getElementById(id);if(g){const b=g.children[k];if(b)b.classList.add('sel');}});
+  Object.entries(st.open).forEach(([ei,t])=>{const el=$('#op'+ei);if(el){el.value=t;wc(ei);}});
+  cur.ex.forEach((e,ei)=>{const d=st.done[ei];if(!d)return;
+    if(e.open){if(d.model)$('#md'+ei).classList.add('show');return;}
+    if(d.revealed)reveal(ei,true);else if(d.checked)check(ei,true);});
+}
+
+/* ---------- corrección ---------- */
+function clearMarks(ei){const ex=$('#ex'+ei);$$('input.gap',ex).forEach(i=>i.classList.remove('ok','bad','rev'));$$('.opt',ex).forEach(o=>o.classList.remove('ok','bad','right','rev'));$$('.fb',ex).forEach(f=>{f.className='fb';f.innerHTML='';});ex.classList.remove('checked','revealed');const sc=$('#sc'+ei);sc.hidden=true;$('.retry',ex).hidden=true;}
+function grade(ei,mark){
+  const reg=REG[ei];let ok=0,bad=0,blank=0,tot=0;const tfb=[];
+  reg.units.forEach(u=>{let uerr=[];
+    let ublank=0;u.gaps.forEach(g=>{tot++;const el=document.getElementById(g.id);const r=match(el.value,g.ans);
+      if(r===true){ok++;if(mark)el.classList.add('ok');}else{if(r===null){blank++;ublank++;}else bad++;if(mark){el.classList.add(r===null?'rev':'bad');}uerr.push(g.ans[0]);}});
+    u.chs.forEach(c=>{tot++;const grp=document.getElementById(c.id);const sel=st.c[c.id];const bs=grp.children;
+      if(sel===c.c){ok++;if(mark)bs[sel].classList.add('ok');}else{if(sel===undefined){blank++;ublank++;}else bad++;if(mark){if(sel!==undefined)bs[sel].classList.add('bad');bs[c.c].classList.add('right');}uerr.push(c.opts[c.c]);}});
+    if(mark){const fb=document.getElementById(`fb${ei}_${u.iid}`);
+      if(fb){if(uerr.length){const onlyBlank=ublank===uerr.length;fb.className='fb show '+(onlyBlank?'blank':'err');fb.innerHTML=`<b>${onlyBlank?'Sin responder. Solución:':'Solución:'}</b> <span lang="en">${uerr.map(esc).join(' · ')}</span>${u.why?' — '+esc(u.why):''}`;}
+        else if(u.why){fb.className='fb show ok';fb.innerHTML=`<b>Bien.</b> ${esc(u.why)}`;}}
+      else if(uerr.length)tfb.push(...uerr);}
+  });
+  if(mark){const t=$('#tfb'+ei);if(t){if(tfb.length){t.className='fb show err';t.innerHTML='<b>Soluciones de las casillas en rojo:</b> <span lang="en">'+tfb.map(esc).join(' · ')+'</span>';}}}
+  return {ok,bad,blank,tot};
+}
+function check(ei,silent){
+  const ex=$('#ex'+ei);const reg=REG[ei];
+  const answered=reg.units.some(u=>u.gaps.some(g=>document.getElementById(g.id).value.trim())||u.chs.some(c=>st.c[c.id]!==undefined));
+  if(!silent&&!answered){$('#msg'+ei).textContent='Responde al menos una pregunta antes de corregir.';return;}
+  $('#msg'+ei).textContent='';clearMarks(ei);const r=grade(ei,true);ex.classList.add('checked');
+  const sc=$('#sc'+ei);sc.hidden=false;sc.textContent=`${r.ok} / ${r.tot}`;sc.className='score'+(r.ok===r.tot?' full':' part');
+  $('.retry',ex).hidden=r.ok===r.tot;
+  st.done[ei]={checked:true,ok:r.ok,tot:r.tot};if(!silent)save();
+  return r;
+}
+function reveal(ei,silent){
+  clearMarks(ei);const ex=$('#ex'+ei);
+  REG[ei].units.forEach(u=>{u.gaps.forEach(g=>{const el=document.getElementById(g.id);if(!match(el.value,g.ans)){el.value=g.ans[0];el.classList.add('rev');st.v[g.id]=g.ans[0];}else el.classList.add('ok');});
+    u.chs.forEach(c=>{const grp=document.getElementById(c.id);[...grp.children].forEach(b=>b.classList.remove('sel'));grp.children[c.c].classList.add('rev');st.c[c.id]=c.c;});
+    const fb=document.getElementById(`fb${ei}_${u.iid}`);if(fb&&u.why){fb.className='fb show ok';fb.innerHTML=esc(u.why);}});
+  ex.classList.add('revealed');const sc=$('#sc'+ei);sc.hidden=false;sc.textContent='Soluciones vistas';sc.className='score rev';
+  st.done[ei]={revealed:true};if(!silent)save();
+}
+function clearEx(ei,onlyWrong){
+  const reg=REG[ei];
+  reg.units.forEach(u=>{u.gaps.forEach(g=>{const el=document.getElementById(g.id);if(!onlyWrong||match(el.value,g.ans)!==true){el.value='';delete st.v[g.id];}});
+    u.chs.forEach(c=>{if(!onlyWrong||st.c[c.id]!==c.c){const grp=document.getElementById(c.id);[...grp.children].forEach(b=>b.classList.remove('sel'));delete st.c[c.id];}});});
+  clearMarks(ei);delete st.done[ei];save();
+  const first=reg.units.flatMap(u=>u.gaps.map(g=>document.getElementById(g.id))).find(el=>!el.value);if(first)first.focus();
+}
+function updSummary(){
+  if(!cur)return;let done=0,ok=0,tot=0,bad=0;
+  cur.ex.forEach((e,i)=>{const d=st.done[i];if(d&&(d.checked||d.revealed||d.openDone||d.model))done++;if(d&&d.checked){ok+=d.ok;tot+=d.tot;bad+=d.tot-d.ok;}});
+  const a=$('#sDone'),b=$('#sPct'),c=$('#sBad');if(!a)return;
+  a.innerHTML=`${done}<small> / ${cur.ex.length}</small>`;b.textContent=tot?Math.round(ok/tot*100)+' %':'–';c.textContent=bad;
+}
+
+
+/* ---------- audio ---------- */
+let voice=null;
+function pickVoice(){try{const vs=speechSynthesis.getVoices();voice=vs.find(v=>/en[-_]GB/i.test(v.lang)&&/female|serena|kate|libby|sonia|google uk english female/i.test(v.name))||vs.find(v=>/en[-_]GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;}catch(e){}}
+try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}catch(e){}
+function say(t,btn){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-GB';if(voice)u.voice=voice;u.rate=.9;speechSynthesis.speak(u);}catch(e){if(btn)btn.title='Tu navegador no permite el audio';}}
+
+/* ---------- eventos ---------- */
+function wc(ei){const t=$('#op'+ei).value.trim();const n=t?t.split(/\s+/).length:0;$('#cnt'+ei).textContent=n?`${n} palabras`:'';}
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.matches('input.gap')){st.v[t.id]=t.value;t.classList.remove('ok','bad','rev');const ei=t.dataset.ex;$('#msg'+ei)&&($('#msg'+ei).textContent='');store.set(key(cur.n),st);}
+  if(t.matches('textarea[data-open]')){const ei=t.dataset.open;st.open[ei]=t.value;wc(ei);if(t.value.trim().split(/\s+/).length>=15){st.done[ei]=Object.assign(st.done[ei]||{},{openDone:true});}store.set(key(cur.n),st);updSummary();}
+});
+document.addEventListener('focusin',e=>{if(e.target.matches('input.gap'))lastFocus=e.target;});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('input.gap')){e.preventDefault();const all=$$('input.gap',$('#ex'+e.target.dataset.ex));const i=all.indexOf(e.target);if(all[i+1])all[i+1].focus();else check(+e.target.dataset.ex);}});
+document.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.go){location.hash=b.dataset.go;return;}
+  if(b.dataset.ch){const id=b.dataset.ch,k=+b.dataset.k;const grp=document.getElementById(id);[...grp.children].forEach(x=>x.classList.remove('sel','ok','bad','right','rev'));b.classList.add('sel');st.c[id]=k;const ei=b.dataset.ex;$('#msg'+ei).textContent='';store.set(key(cur.n),st);return;}
+  if(b.dataset.bank){const ei=b.dataset.ex;const ex=$('#ex'+ei);let tgt=lastFocus&&ex.contains(lastFocus)?lastFocus:$$('input.gap',ex).find(i=>!i.value);if(!tgt)return;tgt.value=b.dataset.bank;st.v[tgt.id]=tgt.value;tgt.classList.remove('ok','bad','rev');store.set(key(cur.n),st);const all=$$('input.gap',ex);const nx=all.slice(all.indexOf(tgt)+1).find(i=>!i.value);(nx||tgt).focus();return;}
+  if(b.dataset.say!==undefined){say(b.dataset.say,b);return;}
+  const a=b.dataset.act,ei=b.dataset.ex!==undefined?+b.dataset.ex:null;
+  if(a==='check')check(ei);
+  else if(a==='reveal')reveal(ei);
+  else if(a==='retry')clearEx(ei,true);
+  else if(a==='clear')clearEx(ei,false);
+  else if(a==='model'){$('#md'+ei).classList.add('show');st.done[ei]=Object.assign(st.done[ei]||{},{model:true,openDone:true});save();}
+  else if(a==='goto'){const ex=$('#ex'+ei);ex.scrollIntoView({behavior:'smooth',block:'start'});}
+  else if(a==='resetall'){st={v:{},c:{},done:{},open:{}};save();renderSession(cur.n);}
+  else if(a==='help')openHelp();
+  else if(a==='closehelp')closeHelp();
+  else if(b.id==='tNav'){const min=!document.body.classList.contains('navmin');setNav(min);store.set('mp_gc_navmin',min);}
+});
+function route(){const h=location.hash.slice(1);let s=S.find(x=>hashOf(x)===h);if(!s){const n=store.get('mp_gc_last');s=S.find(x=>x.n===n)||S[0];}store.set('mp_gc_last',s.n);renderSession(s.n);window.scrollTo(0,0);}
+window.addEventListener('hashchange',route);
+function setNav(min){document.body.classList.toggle('navmin',min);const t=$('#tNav');t.setAttribute('aria-expanded',!min);const l=min?'Mostrar el menú':'Minimizar el menú';t.setAttribute('aria-label',l);t.title=l;}
+setNav(!!store.get('mp_gc_navmin'));
+let helpBack=null;
+function openHelp(){helpBack=document.activeElement;$('#helpModal').hidden=false;$('#helpOk').focus();}
+function closeHelp(){$('#helpModal').hidden=true;store.set('mp_gc_help_seen',true);if(helpBack&&helpBack.focus)helpBack.focus();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#helpModal').hidden)closeHelp();});
+$('#helpModal').addEventListener('click',e=>{if(e.target.id==='helpModal')closeHelp();});
+route();
+if(!store.get('mp_gc_help_seen'))openHelp();
+</script>
+</body>
+</html>
